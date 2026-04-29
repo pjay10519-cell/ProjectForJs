@@ -1,1 +1,1610 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Student Portal - ID Generation</title>
+        <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
+        <link rel="stylesheet" href="[cdnjs.cloudflare.com](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --primary: #6366f1;
+                --primary-dark: #4f46e5;
+                --secondary: #ec4899;
+                --success: #10b981;
+                --error: #ef4444;
+                --warning: #f59e0b;
+                --dark: #1e1b4b;
+                --light: #f8fafc;
+                --glass: rgba(255, 255, 255, 0.1);
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                min-height: 100vh;
+                background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px;
+                overflow-x: hidden;
+            }
+
+            /* Animated Background */
+            .bg-animation {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                z-index: -1;
+            }
+
+            .bg-animation span {
+                position: absolute;
+                display: block;
+                width: 20px;
+                height: 20px;
+                background: rgba(255, 255, 255, 0.05);
+                animation: move 25s infinite;
+                bottom: -150px;
+                border-radius: 50%;
+            }
+
+            .bg-animation span:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
+            .bg-animation span:nth-child(2) { left: 20%; width: 40px; height: 40px; animation-delay: 2s; animation-duration: 12s; }
+            .bg-animation span:nth-child(3) { left: 35%; width: 60px; height: 60px; animation-delay: 4s; }
+            .bg-animation span:nth-child(4) { left: 50%; width: 100px; height: 100px; animation-delay: 0s; animation-duration: 18s; }
+            .bg-animation span:nth-child(5) { left: 65%; width: 50px; height: 50px; animation-delay: 0s; }
+            .bg-animation span:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+            .bg-animation span:nth-child(7) { left: 85%; width: 90px; height: 90px; animation-delay: 7s; }
+            .bg-animation span:nth-child(8) { left: 5%; width: 45px; height: 45px; animation-delay: 15s; animation-duration: 45s; }
+            .bg-animation span:nth-child(9) { left: 55%; width: 35px; height: 35px; animation-delay: 2s; animation-duration: 35s; }
+            .bg-animation span:nth-child(10) { left: 90%; width: 70px; height: 70px; animation-delay: 0s; animation-duration: 11s; }
+
+            @keyframes move {
+                0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                100% { transform: translateY(-1500px) rotate(720deg); opacity: 0; }
+            }
+
+            /* Main Container */
+            .portal-container {
+                width: 100%;
+                max-width: 900px;
+                background: rgba(255, 255, 255, 0.05);
+                backdrop-filter: blur(20px);
+                border-radius: 30px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                overflow: hidden;
+                animation: containerEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            @keyframes containerEntry {
+                from {
+                    opacity: 0;
+                    transform: translateY(50px) scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+            }
+
+            /* Header */
+            .portal-header {
+                background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+                padding: 40px;
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .portal-header::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+                animation: headerShine 3s infinite;
+            }
+
+            @keyframes headerShine {
+                0%, 100% { transform: rotate(0deg); }
+                50% { transform: rotate(180deg); }
+            }
+
+            .portal-header h1 {
+                color: white;
+                font-size: 2.5rem;
+                font-weight: 700;
+                position: relative;
+                z-index: 1;
+                text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .portal-header p {
+                color: rgba(255, 255, 255, 0.9);
+                margin-top: 10px;
+                font-size: 1.1rem;
+                position: relative;
+                z-index: 1;
+            }
+
+            .header-icon {
+                font-size: 4rem;
+                margin-bottom: 15px;
+                animation: iconFloat 3s ease-in-out infinite;
+            }
+
+            @keyframes iconFloat {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-10px); }
+            }
+
+            /* Progress Bar */
+            .progress-container {
+                padding: 30px 40px 0;
+            }
+
+            .progress-steps {
+                display: flex;
+                justify-content: space-between;
+                position: relative;
+            }
+
+            .progress-steps::before {
+                content: '';
+                position: absolute;
+                top: 20px;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 2px;
+            }
+
+            .progress-line {
+                position: absolute;
+                top: 20px;
+                left: 0;
+                height: 4px;
+                background: linear-gradient(90deg, var(--primary), var(--secondary));
+                border-radius: 2px;
+                transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                width: 0%;
+            }
+
+            .step {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                position: relative;
+                z-index: 1;
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+
+            .step:hover {
+                transform: translateY(-3px);
+            }
+
+            .step-circle {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.1);
+                border: 3px solid rgba(255, 255, 255, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: rgba(255, 255, 255, 0.5);
+                font-weight: 600;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .step.active .step-circle {
+                background: linear-gradient(135deg, var(--primary), var(--secondary));
+                border-color: transparent;
+                color: white;
+                box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+                transform: scale(1.1);
+            }
+
+            .step.completed .step-circle {
+                background: var(--success);
+                border-color: transparent;
+                color: white;
+            }
+
+            .step-label {
+                margin-top: 12px;
+                font-size: 0.85rem;
+                color: rgba(255, 255, 255, 0.5);
+                font-weight: 500;
+                transition: color 0.3s;
+            }
+
+            .step.active .step-label,
+            .step.completed .step-label {
+                color: white;
+            }
+
+            /* Form Sections */
+            .form-container {
+                padding: 40px;
+                position: relative;
+                min-height: 400px;
+            }
+
+            .form-section {
+                display: none;
+                animation: fadeSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .form-section.active {
+                display: block;
+            }
+
+            @keyframes fadeSlideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            .section-title {
+                color: white;
+                font-size: 1.5rem;
+                font-weight: 600;
+                margin-bottom: 30px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .section-title i {
+                color: var(--primary);
+                font-size: 1.3rem;
+            }
+
+            /* Input Groups */
+            .input-row {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 25px;
+                margin-bottom: 25px;
+            }
+
+            .input-group {
+                position: relative;
+            }
+
+            .input-group label {
+                display: block;
+                color: rgba(255, 255, 255, 0.8);
+                font-size: 0.9rem;
+                font-weight: 500;
+                margin-bottom: 10px;
+                transition: color 0.3s;
+            }
+
+            .input-wrapper {
+                position: relative;
+            }
+
+            .input-wrapper i {
+                position: absolute;
+                left: 18px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: rgba(255, 255, 255, 0.4);
+                transition: color 0.3s;
+                z-index: 1;
+            }
+
+            .input-wrapper input,
+            .input-wrapper select,
+            .input-wrapper textarea {
+                width: 100%;
+                padding: 16px 18px 16px 50px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                border-radius: 14px;
+                color: white;
+                font-family: 'Poppins', sans-serif;
+                font-size: 1rem;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                outline: none;
+            }
+
+            .input-wrapper input::placeholder,
+            .input-wrapper textarea::placeholder {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+            .input-wrapper input:focus,
+            .input-wrapper select:focus,
+            .input-wrapper textarea:focus {
+                border-color: var(--primary);
+                background: rgba(99, 102, 241, 0.1);
+                box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+            }
+
+            .input-wrapper input:focus + i,
+            .input-wrapper select:focus + i {
+                color: var(--primary);
+            }
+
+            .input-wrapper select {
+                cursor: pointer;
+                appearance: none;
+            }
+
+            .input-wrapper select option {
+                background: var(--dark);
+                color: white;
+            }
+
+            /* Validation States */
+            .input-group.valid .input-wrapper input,
+            .input-group.valid .input-wrapper select {
+                border-color: var(--success);
+            }
+
+            .input-group.valid .input-wrapper i {
+                color: var(--success);
+            }
+
+            .input-group.invalid .input-wrapper input,
+            .input-group.invalid .input-wrapper select {
+                border-color: var(--error);
+                animation: shake 0.5s;
+            }
+
+            .input-group.invalid .input-wrapper i {
+                color: var(--error);
+            }
+
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                20%, 60% { transform: translateX(-5px); }
+                40%, 80% { transform: translateX(5px); }
+            }
+
+            .error-message {
+                color: var(--error);
+                font-size: 0.8rem;
+                margin-top: 8px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: all 0.3s;
+            }
+
+            .input-group.invalid .error-message {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .success-icon {
+                position: absolute;
+                right: 18px;
+                top: 50%;
+                transform: translateY(-50%) scale(0);
+                color: var(--success);
+                transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            }
+
+            .input-group.valid .success-icon {
+                transform: translateY(-50%) scale(1);
+            }
+
+            /* Password Strength */
+            .password-strength {
+                margin-top: 12px;
+            }
+
+            .strength-bar {
+                height: 6px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 3px;
+                overflow: hidden;
+            }
+
+            .strength-fill {
+                height: 100%;
+                width: 0%;
+                border-radius: 3px;
+                transition: all 0.4s;
+            }
+
+            .strength-fill.weak { width: 25%; background: var(--error); }
+            .strength-fill.fair { width: 50%; background: var(--warning); }
+            .strength-fill.good { width: 75%; background: #22c55e; }
+            .strength-fill.strong { width: 100%; background: var(--success); }
+
+            .strength-text {
+                font-size: 0.8rem;
+                margin-top: 6px;
+                color: rgba(255, 255, 255, 0.6);
+            }
+
+            /* Toggle Password */
+            .toggle-password {
+                position: absolute;
+                right: 50px;
+                top: 50%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                color: rgba(255, 255, 255, 0.4);
+                cursor: pointer;
+                padding: 5px;
+                transition: color 0.3s;
+            }
+
+            .toggle-password:hover {
+                color: white;
+            }
+
+            /* Quiz Section */
+            .quiz-container {
+                background: rgba(255, 255, 255, 0.03);
+                border-radius: 20px;
+                padding: 25px;
+                margin-bottom: 25px;
+            }
+
+            .quiz-question {
+                color: white;
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+                font-weight: 500;
+            }
+
+            .quiz-options {
+                display: grid;
+                gap: 12px;
+            }
+
+            .quiz-option {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 18px 20px;
+                background: rgba(255, 255, 255, 0.05);
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                border-radius: 14px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .quiz-option:hover {
+                background: rgba(99, 102, 241, 0.1);
+                border-color: var(--primary);
+            }
+
+        .quiz-option input {
+            display: none;
+        }
+
+        .quiz-option .radio-custom {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .quiz-option .radio-custom::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: scale(0);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .quiz-option input:checked + .radio-custom {
+            border-color: var(--primary);
+        }
+
+        .quiz-option input:checked + .radio-custom::after {
+            transform: scale(1);
+        }
+
+        .quiz-option span {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--error);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Extra Section - Summary */
+        .summary-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.2));
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .summary-value {
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Generated ID Card */
+        .id-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transform: perspective(1000px) rotateY(0deg);
+            transition: transform 0.5s;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.4);
+        }
+
+        .id-card:hover {
+            transform: perspective(1000px) rotateY(5deg) scale(1.02);
+        }
+
+        .id-card-header {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        .student-id {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 5px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: idPulse 2s infinite;
+        }
+
+        @keyframes idPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .id-card-footer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Buttons */
+        .button-row {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 27, 75, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .loader {
+            width: 80px;
+            height: 80px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: white;
+            margin-top: 25px;
+            font-size: 1.1rem;
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(30, 27, 75, 0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            max-width: 500px;
+            animation: modalEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes modalEntry {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .success-checkmark {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--success), #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: checkmarkPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
+        }
+
+        @keyframes checkmarkPop {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .success-checkmark i {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .modal h2 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .modal p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .portal-header h1 { font-size: 1.8rem; }
+            .input-row { grid-template-columns: 1fr; }
+            .button-row { flex-direction: column; }
+            .btn { width: 100%; justify-content: center; }
+            .step-label { font-size: 0.7rem; }
+            .progress-container { padding: 20px 20px 0; }
+            .form-container { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loader"></div>
+        <p>Generating your Student ID...</p>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content">
+            <div class="success-checkmark">
+                <i class="fas fa-check"></i>
+            </div>
+            <h2>Registration Complete!</h2>
+            <p>Your student ID has been successfully generated. Welcome to the portal!</p>
+            <div class="id-card">
+                <div class="id-card-header">Student ID</div>
+                <div class="student-id" id="finalStudentId">STU-2024-XXXX</div>
+                <div class="id-card-footer">Valid for Academic Year 2024-2025</div>
+            </div>
+            <button class="btn btn-primary" style="margin-top: 30px; width: 100%; justify-content: center;" onclick="location.reload()">
+                <i class="fas fa-redo"></i> Start New Registration
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Portal Container -->
+    <div class="portal-container">
+        <div class="portal-header">
+            <div class="header-icon">🎓</div>
+            <h1>Student Portal</h1>
+            <p>Complete your registration to generate Student ID</p>
+        </div>
+
+        <!-- Progress Steps -->
+        <div class="progress-container">
+            <div class="progress-steps">
+                <div class="progress-line" id="progressLine"></div>
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">Personal Info</span>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">Academic Info</span>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">Security</span>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <span class="step-label">Quiz</span>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-circle">5</div>
+                    <span class="step-label">Summary</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <!-- Section 1: Personal Info -->
+            <div class="form-section active" id="section1">
+                <h2 class="section-title"><i class="fas fa-user"></i> Personal Information</h2>
+                
+                <div class="input-row">
+                    <div class="input-group" id="firstNameGroup">
+                        <label>First Name *</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="firstName" placeholder="Enter first name">
+                            <i class="fas fa-user"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please enter a valid first name</span></div>
+                    </div>
+                    <div class="input-group" id="lastNameGroup">
+                        <label>Last Name *</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="lastName" placeholder="Enter last name">
+                            <i class="fas fa-user"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please enter a valid last name</span></div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group" id="emailGroup">
+                        <label>Email Address *</label>
+                        <div class="input-wrapper">
+                            <input type="email" id="email" placeholder="student@university.edu">
+                            <i class="fas fa-envelope"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please enter a valid email address</span></div>
+                    </div>
+                    <div class="input-group" id="phoneGroup">
+                        <label>Phone Number *</label>
+                        <div class="input-wrapper">
+                            <input type="tel" id="phone" placeholder="+1 (555) 000-0000">
+                            <i class="fas fa-phone"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please enter a valid phone number</span></div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group" id="dobGroup">
+                        <label>Date of Birth *</label>
+                        <div class="input-wrapper">
+                            <input type="date" id="dob">
+                            <i class="fas fa-calendar"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select your date of birth</span></div>
+                    </div>
+                    <div class="input-group" id="genderGroup">
+                        <label>Gender *</label>
+                        <div class="input-wrapper">
+                            <select id="gender">
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not">Prefer not to say</option>
+                            </select>
+                            <i class="fas fa-venus-mars"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select your gender</span></div>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextSection(1)">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 2: Academic Info -->
+            <div class="form-section" id="section2">
+                <h2 class="section-title"><i class="fas fa-graduation-cap"></i> Academic Information</h2>
+                
+                <div class="input-row">
+                    <div class="input-group" id="programGroup">
+                        <label>Program/Degree *</label>
+                        <div class="input-wrapper">
+                            <select id="program">
+                                <option value="">Select program</option>
+                                <option value="btech">B.Tech</option>
+                                <option value="bsc">B.Sc</option>
+                                <option value="bca">BCA</option>
+                                <option value="mtech">M.Tech</option>
+                                <option value="msc">M.Sc</option>
+                                <option value="mca">MCA</option>
+                                <option value="phd">PhD</option>
+                            </select>
+                            <i class="fas fa-book"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select a program</span></div>
+                    </div>
+                    <div class="input-group" id="departmentGroup">
+                        <label>Department *</label>
+                        <div class="input-wrapper">
+                            <select id="department">
+                                <option value="">Select department</option>
+                                <option value="cse">Computer Science</option>
+                                <option value="ece">Electronics</option>
+                                <option value="mech">Mechanical</option>
+                                <option value="civil">Civil</option>
+                                <option value="eee">Electrical</option>
+                                <option value="it">Information Technology</option>
+                            </select>
+                            <i class="fas fa-building"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select a department</span></div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group" id="yearGroup">
+                        <label>Year of Study *</label>
+                        <div class="input-wrapper">
+                            <select id="year">
+                                <option value="">Select year</option>
+                                <option value="1">1st Year</option>
+                                <option value="2">2nd Year</option>
+                                <option value="3">3rd Year</option>
+                                <option value="4">4th Year</option>
+                            </select>
+                            <i class="fas fa-layer-group"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select your year</span></div>
+                    </div>
+                    <div class="input-group" id="rollGroup">
+                        <label>Previous Roll Number (if any)</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="roll" placeholder="e.g., 21CSE001">
+                            <i class="fas fa-id-badge"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Invalid roll number format</span></div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group" id="cgpaGroup">
+                        <label>Previous CGPA *</label>
+                        <div class="input-wrapper">
+                            <input type="number" id="cgpa" placeholder="e.g., 8.5" step="0.01" min="0" max="10">
+                            <i class="fas fa-chart-line"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>CGPA must be between 0 and 10</span></div>
+                    </div>
+                    <div class="input-group" id="admissionGroup">
+                        <label>Admission Date *</label>
+                        <div class="input-wrapper">
+                            <input type="date" id="admission">
+                            <i class="fas fa-calendar-check"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select admission date</span></div>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-secondary" onclick="prevSection(2)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection(2)">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 3: Password/Security -->
+            <div class="form-section" id="section3">
+                <h2 class="section-title"><i class="fas fa-shield-alt"></i> Security Setup</h2>
+                
+                <div class="input-row">
+                    <div class="input-group" id="passwordGroup">
+                        <label>Create Password *</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="password" placeholder="Enter strong password">
+                            <i class="fas fa-lock"></i>
+                            <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strengthFill"></div>
+                            </div>
+                            <div class="strength-text" id="strengthText">Password strength</div>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Password must be at least 8 characters</span></div>
+                    </div>
+                    <div class="input-group" id="confirmPasswordGroup">
+                        <label>Confirm Password *</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="confirmPassword" placeholder="Confirm your password">
+                            <i class="fas fa-lock"></i>
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Passwords do not match</span></div>
+                    </div>
+                </div>
+
+                <div class="input-row">
+                    <div class="input-group" id="securityQuestionGroup">
+                        <label>Security Question *</label>
+                        <div class="input-wrapper">
+                            <select id="securityQuestion">
+                                <option value="">Select security question</option>
+                                <option value="pet">What was your first pet's name?</option>
+                                <option value="school">What was your first school's name?</option>
+                                <option value="city">In which city were you born?</option>
+                                <option value="book">What is your favorite book?</option>
+                                <option value="movie">What is your favorite movie?</option>
+                            </select>
+                            <i class="fas fa-question-circle"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please select a security question</span></div>
+                    </div>
+                    <div class="input-group" id="securityAnswerGroup">
+                        <label>Security Answer *</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="securityAnswer" placeholder="Your answer">
+                            <i class="fas fa-key"></i>
+                            <i class="fas fa-check-circle success-icon"></i>
+                        </div>
+                        <div class="error-message"><i class="fas fa-exclamation-circle"></i> <span>Please provide an answer</span></div>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-secondary" onclick="prevSection(3)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection(3)">
+                        Continue <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 4: Quiz -->
+            <div class="form-section" id="section4">
+                <h2 class="section-title"><i class="fas fa-brain"></i> Verification Quiz</h2>
+                <p style="color: rgba(255,255,255,0.7); margin-bottom: 25px;">Answer these questions to verify you're ready to join.</p>
+                
+                <div class="quiz-container" id="quiz1">
+                    <div class="quiz-question">1. What does CPU stand for?</div>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz1" value="a">
+                            <span class="radio-custom"></span>
+                            <span>Computer Personal Unit</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz1" value="b">
+                            <span class="radio-custom"></span>
+                            <span>Central Processing Unit</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz1" value="c">
+                            <span class="radio-custom"></span>
+                            <span>Central Program Unit</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quiz-container" id="quiz2">
+                    <div class="quiz-question">2. Which of the following is NOT a programming language?</div>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz2" value="a">
+                            <span class="radio-custom"></span>
+                            <span>Python</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz2" value="b">
+                            <span class="radio-custom"></span>
+                            <span>HTML</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz2" value="c">
+                            <span class="radio-custom"></span>
+                            <span>JavaScript</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quiz-container" id="quiz3">
+                    <div class="quiz-question">3. What is the binary representation of decimal 5?</div>
+                    <div class="quiz-options">
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz3" value="a">
+                            <span class="radio-custom"></span>
+                            <span>101</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz3" value="b">
+                            <span class="radio-custom"></span>
+                            <span>110</span>
+                        </label>
+                        <label class="quiz-option">
+                            <input type="radio" name="quiz3" value="c">
+                            <span class="radio-custom"></span>
+                            <span>100</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-secondary" onclick="prevSection(4)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection(4)">
+                        Submit Quiz <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section 5: Summary -->
+            <div class="form-section" id="section5">
+                <h2 class="section-title"><i class="fas fa-clipboard-check"></i> Registration Summary</h2>
+                
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <span class="summary-label">Full Name</span>
+                        <span class="summary-value" id="summaryName">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Email</span>
+                        <span class="summary-value" id="summaryEmail">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Phone</span>
+                        <span class="summary-value" id="summaryPhone">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Program</span>
+                        <span class="summary-value" id="summaryProgram">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Department</span>
+                        <span class="summary-value" id="summaryDept">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Year</span>
+                        <span class="summary-value" id="summaryYear">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">CGPA</span>
+                        <span class="summary-value" id="summaryCGPA">-</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="summary-label">Quiz Score</span>
+                        <span class="summary-value" id="summaryQuiz">-</span>
+                    </div>
+                </div>
+
+                <div class="id-card">
+                    <div class="id-card-header">Your Generated Student ID</div>
+                    <div class="student-id" id="studentId">STU-2024-XXXX</div>
+                    <div class="id-card-footer">This will be your unique identifier</div>
+                </div>
+
+                <div class="button-row">
+                    <button class="btn btn-secondary" onclick="prevSection(5)">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                    <button class="btn btn-success" onclick="submitForm()">
+                        <i class="fas fa-check"></i> Complete Registration
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 1;
+        const totalSections = 5;
+        const quizAnswers = { quiz1: 'b', quiz2: 'b', quiz3: 'a' };
+        let quizScore = 0;
+
+        // Validation Rules
+        const validationRules = {
+            firstName: {
+                validate: (value) => /^[a-zA-Z]{2,30}$/.test(value.trim()),
+                message: 'First name must be 2-30 letters only'
+            },
+            lastName: {
+                validate: (value) => /^[a-zA-Z]{2,30}$/.test(value.trim()),
+                message: 'Last name must be 2-30 letters only'
+            },
+            email: {
+                validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim()),
+                message: 'Please enter a valid email address'
+            },
+            phone: {
+                validate: (value) => /^[\d\s\-\+\(\)]{10,15}$/.test(value.trim()),
+                message: 'Please enter a valid phone number'
+            },
+            dob: {
+                validate: (value) => {
+                    if (!value) return false;
+                    const date = new Date(value);
+                    const today = new Date();
+                    const age = today.getFullYear() - date.getFullYear();
+                    return age >= 16 && age <= 60;
+                },
+                message: 'Age must be between 16 and 60'
+            },
+            gender: {
+                validate: (value) => value !== '',
+                message: 'Please select your gender'
+            },
+            program: {
+                validate: (value) => value !== '',
+                message: 'Please select a program'
+            },
+            department: {
+                validate: (value) => value !== '',
+                message: 'Please select a department'
+            },
+            year: {
+                validate: (value) => value !== '',
+                message: 'Please select your year'
+            },
+            cgpa: {
+                validate: (value) => {
+                    const num = parseFloat(value);
+                    return !isNaN(num) && num >= 0 && num <= 10;
+                },
+                message: 'CGPA must be between 0 and 10'
+            },
+            admission: {
+                validate: (value) => value !== '',
+                message: 'Please select admission date'
+            },
+            password: {
+                validate: (value) => value.length >= 8,
+                message: 'Password must be at least 8 characters'
+            },
+            confirmPassword: {
+                validate: (value) => value === document.getElementById('password').value,
+                message: 'Passwords do not match'
+            },
+            securityQuestion: {
+                validate: (value) => value !== '',
+                message: 'Please select a security question'
+            },
+            securityAnswer: {
+                validate: (value) => value.trim().length >= 2,
+                message: 'Please provide an answer'
+            }
+        };
+
+        // Field groupings by section
+        const sectionFields = {
+            1: ['firstName', 'lastName', 'email', 'phone', 'dob', 'gender'],
+            2: ['program', 'department', 'year', 'cgpa', 'admission'],
+            3: ['password', 'confirmPassword', 'securityQuestion', 'securityAnswer'],
+            4: ['quiz1', 'quiz2', 'quiz3'],
+            5: []
+        };
+
+        // Real-time validation
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', () => validateField(input.id));
+            input.addEventListener('blur', () => validateField(input.id));
+        });
+
+        // Password strength checker
+        document.getElementById('password').addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+
+        function checkPasswordStrength(password) {
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            strengthFill.className = 'strength-fill';
+            
+            if (password.length === 0) {
+                strengthText.textContent = 'Password strength';
+                strengthFill.style.width = '0%';
+            } else if (strength <= 1) {
+                strengthFill.classList.add('weak');
+                strengthText.textContent = 'Weak - Add uppercase, numbers, symbols';
+            } else if (strength === 2) {
+                strengthFill.classList.add('fair');
+                strengthText.textContent = 'Fair - Keep going!';
+            } else if (strength === 3) {
+                strengthFill.classList.add('good');
+                strengthText.textContent = 'Good - Almost there!';
+            } else {
+                strengthFill.classList.add('strong');
+                strengthText.textContent = 'Strong - Excellent password!';
+            }
+        }
+
+        function validateField(fieldId) {
+            const field = document.getElementById(fieldId);
+            const group = document.getElementById(fieldId + 'Group');
+            const rule = validationRules[fieldId];
+
+            if (!field || !group || !rule) return true;
+
+            const isValid = rule.validate(field.value);
+            
+            group.classList.remove('valid', 'invalid');
+            
+            if (field.value.length > 0 || field.tagName === 'SELECT') {
+                if (isValid) {
+                    group.classList.add('valid');
+                } else {
+                    group.classList.add('invalid');
+                    group.querySelector('.error-message span').textContent = rule.message;
+                }
+            }
+
+            return isValid;
+        }
+
+        function validateSection(section) {
+            const fields = sectionFields[section];
+            let allValid = true;
+
+            if (section === 4) {
+                // Quiz validation
+                return validateQuiz();
+            }
+
+            fields.forEach(fieldId => {
+                if (!validateField(fieldId)) {
+                    allValid = false;
+                }
+            });
+
+            return allValid;
+        }
+
+        function validateQuiz() {
+            quizScore = 0;
+            let allAnswered = true;
+
+            Object.keys(quizAnswers).forEach(quizName => {
+                const selected = document.querySelector(`input[name="${quizName}"]:checked`);
+                const container = document.getElementById(quizName);
+                
+                if (!selected) {
+                    allAnswered = false;
+                    container.style.border = '2px solid var(--error)';
+                    return;
+                }
+
+                container.style.border = 'none';
+                const options = container.querySelectorAll('.quiz-option');
+                
+                options.forEach(opt => {
+                    opt.classList.remove('correct', 'incorrect');
+                    const input = opt.querySelector('input');
+                    if (input.value === quizAnswers[quizName]) {
+                        opt.classList.add('correct');
+                    } else if (input.checked) {
+                        opt.classList.add('incorrect');
+                    }
+                });
+
+                if (selected.value === quizAnswers[quizName]) {
+                    quizScore++;
+                }
+            });
+
+            if (!allAnswered) {
+                alert('Please answer all quiz questions');
+                return false;
+            }
+ 
+            return true;
+        }
+
+        function nextSection(current) {
+            if (!validateSection(current)) {
+                return;
+            }
+
+            if (current < totalSections) {
+                document.getElementById(`section${current}`).classList.remove('active');
+                document.getElementById(`section${current + 1}`).classList.add('active');
+                
+                document.querySelectorAll('.step').forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index + 1 < current + 1) {
+                        step.classList.add('completed');
+                    } else if (index + 1 === current + 1) {
+                        step.classList.add('active');
+                    }
+                });
+
+                const progressLine = document.getElementById('progressLine');
+                progressLine.style.width = `${(current / (totalSections - 1)) * 100}%`;
+
+                currentSection = current + 1;
+
+                if (currentSection === 5) {
+                    updateSummary();
+                }
+            }
+        }
+
+        function prevSection(current) {
+            if (current > 1) {
+                document.getElementById(`section${current}`).classList.remove('active');
+                document.getElementById(`section${current - 1}`).classList.add('active');
+                
+                document.querySelectorAll('.step').forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index + 1 < current - 1) {
+                        step.classList.add('completed');
+                    } else if (index + 1 === current - 1) {
+                        step.classList.add('active');
+                    }
+                });
+
+                const progressLine = document.getElementById('progressLine');
+                progressLine.style.width = `${((current - 2) / (totalSections - 1)) * 100}%`;
+
+                currentSection = current - 1;
+            }
+        }
+
+        function generateStudentId() {
+            const year = new Date().getFullYear();
+            const dept = document.getElementById('department').value.toUpperCase();
+            const random = Math.floor(1000 + Math.random() * 9000);
+            return `STU-${year}-${dept}-${random}`;
+        }
+
+        function updateSummary() {
+            const studentId = generateStudentId();
+            
+            document.getElementById('summaryName').textContent = 
+                `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`;
+            document.getElementById('summaryEmail').textContent = document.getElementById('email').value;
+            document.getElementById('summaryPhone').textContent = document.getElementById('phone').value;
+            document.getElementById('summaryProgram').textContent = 
+                document.getElementById('program').options[document.getElementById('program').selectedIndex].text;
+            document.getElementById('summaryDept').textContent = 
+                document.getElementById('department').options[document.getElementById('department').selectedIndex].text;
+            document.getElementById('summaryYear').textContent = 
+                document.getElementById('year').options[document.getElementById('year').selectedIndex].text;
+            document.getElementById('summaryCGPA').textContent = document.getElementById('cgpa').value;
+            document.getElementById('summaryQuiz').textContent = `${quizScore}/3`;
+            document.getElementById('studentId').textContent = studentId;
+        }
+
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.parentElement.querySelector('.toggle-password i');
+            
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function submitForm() {
+            const loading = document.getElementById('loading');
+            loading.classList.add('active');
+
+            setTimeout(() => {
+                loading.classList.remove('active');
+                const modal = document.getElementById('successModal');
+                document.getElementById('finalStudentId').textContent = document.getElementById('studentId').textContent;
+                modal.classList.add('active');
+            }, 2000);
+        }
+
+        // Step click navigation
+        document.querySelectorAll('.step').forEach(step => {
+            step.addEventListener('click', function() {
+                const targetStep = parseInt(this.dataset.step);
+                if (targetStep < currentSection) {
+                    // Allow going back
+                    while (currentSection > targetStep) {
+                        prevSection(currentSection);
+                    }
+                }
+            });
+        });
+    </script>
+    <div class="cursor"></div>
+<div class="ripple-container"></div>
+</body>
+</html>
 
